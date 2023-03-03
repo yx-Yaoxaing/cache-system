@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.cache.redis.system.auto.RedisStartInitAutoConfiguration, \
+org.cache.redis.system.auto.CustomRedisAutoConfiguration

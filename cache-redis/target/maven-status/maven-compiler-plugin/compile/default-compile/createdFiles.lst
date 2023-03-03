@@ -1,0 +1,9 @@
+org\cache\redis\system\auto\CustomRedisAutoConfiguration.class
+org\cache\redis\system\service\AbstractRedisCacheHandle.class
+org\cache\redis\system\service\CacheServiceClient.class
+org\cache\redis\system\auto\RedisStartInitAutoConfiguration.class
+org\cache\redis\system\service\CacheClient.class
+org\cache\redis\system\util\SpringRedisBeanObjectUtils.class
+org\cache\redis\system\communal\RedisOperateHash.class
+org\cache\redis\system\communal\RedisOperateString.class
+org\cache\redis\system\common\Validate.class
