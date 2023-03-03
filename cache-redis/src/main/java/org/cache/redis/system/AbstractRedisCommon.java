@@ -1,10 +1,18 @@
 package org.cache.redis.system;
 
 
+import org.springframework.data.redis.core.RedisTemplate;
+
 public class AbstractRedisCommon {
 
+    private static RedisTemplate redisTemplate;
+
+    public static void setRedisTemplate(RedisTemplate redisTemplate){
+        AbstractRedisCommon.redisTemplate = redisTemplate;
+    }
+
     public static boolean hashKey(String key){
-        return true;
+       return redisTemplate.hasKey(key);
     }
 
 }

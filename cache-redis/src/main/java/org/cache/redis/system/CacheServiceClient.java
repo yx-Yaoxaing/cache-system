@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @author uYxUuu
  * 缓存客户端相关业务
  */
-public class CacheServiceClient implements InitializingBean {
+public class CacheServiceClient extends AbstractRedisCommon implements InitializingBean {
 
     private static RedisTemplate redisTemplate;
 
@@ -29,7 +29,7 @@ public class CacheServiceClient implements InitializingBean {
      * @param <ID> id
      * @return 缓存结果
      */
-    public static <R,ID> R queryCacheAndDB(String keyPrefix, ID id, long time, TimeUnit timeUnit, Class<R> type, Function<ID,R> function){
+    public static <R,ID> R doQueryCacheAndDB(String keyPrefix, ID id, long time, TimeUnit timeUnit, Class<R> type, Function<ID,R> function){
         String redisCacheKey = keyPrefix + id;
         // 查询redis
         Object cacheData = redisTemplate.opsForValue().get(redisCacheKey);
@@ -59,20 +59,25 @@ public class CacheServiceClient implements InitializingBean {
      * 当key和member存在的时候 就是修改{@code type} 当type等于1的时候就是直接修改 当type等于2的时候新值大于旧值才会进行修改
      * {@see 进行使用的时候 {@code type}的正确性 相对于来说很重要 这取决于业务是怎么执行的}
      */
-    public static <R,N> void sort(String key,R member,N score,int type){
+    public static <R,N> void doRank(String key,R member,N score,int type){
+        Double dataScore = Double.valueOf((String) score);
         if (type == 2 && hashKey(key)) {
             // 取旧值 比较大小 修改值
+            Double redicScore = redisTemplate.opsForZSet().score(key, member);
+            if (dataScore > redicScore) {
+                redisTemplate.opsForZSet().add(key,member,dataScore);
+            }
+        } else {
+            redisTemplate.opsForZSet().add(key, member, dataScore);
         }
     }
 
-    private static boolean hashKey(String key) {
 
-        return false;
-    }
 
 
     @Override
     public void afterPropertiesSet() throws Exception {
         redisTemplate = (RedisTemplate) SpringRedisBeanObjectUtils.getBean("redisTemplate");
+        setRedisTemplate(redisTemplate);
     }
 }
