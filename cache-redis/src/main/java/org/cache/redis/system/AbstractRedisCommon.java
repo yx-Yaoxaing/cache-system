@@ -3,7 +3,7 @@ package org.cache.redis.system;
 
 import org.springframework.data.redis.core.RedisTemplate;
 
-public class AbstractRedisCommon {
+public abstract class AbstractRedisCommon {
 
     private static RedisTemplate redisTemplate;
 
